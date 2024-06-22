@@ -1,5 +1,6 @@
 import numpy as np
 from collections import deque
+import heapq
 
 def findPath(visited, end):
     """
@@ -101,7 +102,7 @@ def DFS(matrix, start, end):
     expand[start] = None
 
     while frontier:
-        current = frontier.pop(0)
+        current = frontier.pop()
         visited[current] = None
 
         if current == end:
@@ -110,11 +111,10 @@ def DFS(matrix, start, end):
             path = findPath(visited, end)
             return visited, path
 
-        for neighbor, connected in enumerate(matrix[current]):
+        for neighbor, connected in reversed(list(enumerate(matrix[current]))):
             if connected != 0 and neighbor not in visited:
                 frontier.append(neighbor)
                 expand[neighbor] = current
-                break
 
     return visited, []
 
@@ -140,9 +140,30 @@ def UCS(matrix, start, end):
         Founded path
     """
     # TODO:  
-    path=[]
-    visited={}
-    return visited, path
+    numNodes = len(matrix)
+    visited = {}
+    pq = [(0, start)]  # Priority queue with tuples of (cost, node)
+    heapq.heapify(pq)  # Heapify the priority queue
+    visited[start] = None  # Starting node has no predecessor
+    cost = {node: float('inf') for node in range(numNodes)}
+    cost[start] = 0
+
+    while pq:
+        currCost, currNode = heapq.heappop(pq)
+
+        if currNode == end:
+            path = findPath(visited, end)
+            return visited, path
+
+        for neighbor, weight in enumerate(matrix[currNode]):
+            if weight != 0:
+                new_cost = currCost + weight
+                if new_cost < cost[neighbor]:
+                    cost[neighbor] = new_cost
+                    heapq.heappush(pq, (new_cost, neighbor))
+                    visited[neighbor] = currNode
+    
+    return visited, []
 
 def GBFS(matrix, start, end):
     """
