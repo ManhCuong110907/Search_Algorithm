@@ -81,7 +81,9 @@ def run(input, algorithm, delay):
     elif algorithm == 'astar':
         visited, path  = Astar(matrix, start, end, pos)
     elif algorithm == 'dls':
-        visited, path  = DLS(matrix, start, end, 2)
+        visited, path  = DLS(matrix, start, end, 5)
+    elif algorithm == 'ids':
+        visited, path  = IDS(matrix, start, end)
     else:
         print("Pass a search algorithm to run program.")
     

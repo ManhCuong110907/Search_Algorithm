@@ -347,7 +347,7 @@ def DLS(matrix, start, end, depth_limit):
                 if connected != 0 and neighbor not in visited:
                     frontier.append((neighbor, current, cur_depth + 1))
 
-    print("No path found within depth limit")
+    print("No path found within depth limit", depth_limit)
     return visited, []  
 def IDS(matrix, start, end):
     """
@@ -372,7 +372,9 @@ def IDS(matrix, start, end):
     """
     depth_limit = 0
     while True:
+        visited = {}
+        path = []
         visited, path = DLS(matrix, start, end, depth_limit)
-        if path is not None:
+        if path != []:
             return visited, path
         depth_limit += 1
